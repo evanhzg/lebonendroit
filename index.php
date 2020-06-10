@@ -15,6 +15,15 @@
     <title>Le Bon Endroit - Site d'annonces</title>
 
     <link rel="stylesheet" href="style/css/style.css">
+    
+</head>
+
+<body>
+
+<header>
+    <div class="head_banner">
+        <input type="text" class="searchbar">
+    </div>
 
     <nav class="sidenav">
         <ul class="right hide-on-med-and-down">
@@ -27,16 +36,6 @@
         </ul>
         <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
     </nav>
-
-    
-</head>
-
-<body>
-
-<header>
-    <div class="head_banner">
-        <input type="text" class="searchbar">
-    </div>
     
 </header>
 
