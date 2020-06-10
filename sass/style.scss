@@ -1,0 +1,35 @@
+$taille_sidebar: 300px;
+$hauteur_header: 100px;
+
+html, body {
+    margin: 0;
+}
+
+.head_banner {
+    background-color: rgb(74, 189, 125);
+    width: 100%;
+    height: $hauteur_header;
+    margin: 0;
+}
+
+.sidenav {
+    position: fixed;
+    width: $taille_sidebar;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin: 0;
+    background-color: white;
+    border: 1px solid black;
+    & ul{
+        list-style-type: none;
+    }
+}
+
+.searchbar {
+    position: relative;
+    width: 20vw;
+    height: 10px;
+    left: $taille_sidebar + 30px;
+    top: $hauteur_header / 2;
+}
