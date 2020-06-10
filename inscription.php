@@ -3,11 +3,74 @@
 
 <?php
 
-$bdd = new PDO('mysql:host=192.168.64.3;dbname=espace_membre', 'root', '');
+$bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 
 if(isset($_POST['forminscription']))
 {
-    echo "ok";
+    $pseudo = htmlspecialchars($_POST['pseudo']);
+    $mail = htmlspecialchars($_POST['mail']);
+    $mail2 = htmlspecialchars($_POST['mail2']);
+    $mdp = sha1($_POST['mdp']);
+    $mdp2 = sha1($_POST['mdp2']);
+
+    if(!empty($_POST['pseudo']) AND ($_POST['mail']) AND ($_POST['mail2']) AND ($_POST['mdp']) AND ($_POST['mdp2']))
+    {
+        $pseudolength = strlen($pseudo);
+        if($pseudolength <= 255)
+        {
+            if($mail == $mail2)
+            {
+                if(filter_var($mail, FILTER_VALIDATE_EMAIL))
+                {
+                    $reqmail = $bdd->prepare("SELECT * FROM membre WHERE mail = ?");
+                    $reqmail->execute(array($mail));
+                    $mailexist = $reqmail->rowCount();
+
+                    $reqpseudo = $bdd->prepare("SELECT * FROM membre WHERE pseudo = ?");
+                    $reqpseudo->execute(array($pseudo));
+                    $pseudoexist = $reqpseudo->rowCount();
+                    if($mailexist == 0 && $pseudoexist == 0)
+                    {
+                        if($mdp == $mdp2)
+                        {
+                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, mail, mdp) VALUES (?, ?, ?)");
+                            $insertmbr->execute(array($pseudo, $mail, $mdp));
+                            $erreur = "Compte créé avec succès!";
+                            header('Location: index.php');
+                        }
+                        else
+                        {
+                            $erreur = "Vos mots de passe diffèrent!";
+                        }
+                    }
+                    elseif($mailexist != 0)
+                    {
+                        $erreur  = "Adresse mail déjà utilisée, veuillez en choisir une autre";
+                    }
+                    else
+                    {
+                        $erreur  = "Pseudo déjà utilisé, veuillez en choisir un autre";
+                    }
+                }
+                else
+                {
+                    $erreur = "Votre mail n'est pas valide!";
+                }
+            }
+            else
+            {
+                $erreur = "Les deux champs 'mail' doivent correspondre!";
+            }
+        }
+        else
+        {
+            $erreur = "Votre pesudo ne doit pas dépasser 255 caracteres!";
+        }
+    }
+    else
+    {
+        $erreur = "Tous les champs doivent être remplis.";
+    }
 }
 
 ?>
@@ -39,7 +102,7 @@ if(isset($_POST['forminscription']))
                         <label for="pseudo">Pseudo:</label>
                     </td>
                     <td align="right">
-                        <input type="text" placeholder="Pseudo" id="pseudo" name="pseudo">
+                        <input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" value="<?php if(isset($pseudo)) {echo $pseudo;} ?>">
                     </td>
                 </tr>
 
@@ -81,8 +144,14 @@ if(isset($_POST['forminscription']))
             </table>
             <br />
             <input type="submit" name="forminscription" value="S'inscrire">
-
         </form>
+        <?php
+        if(isset($erreur))
+        {
+            echo '<font color = "red">'.$erreur."</font>";
+        }
+        ?>
+
     </div>
 </body>
 
