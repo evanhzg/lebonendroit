@@ -9,7 +9,7 @@ $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 if(isset($_POST['formconnect']))
 {
      $pseudoconnect = htmlspecialchars($_POST['pseudoconnect']);
-     $mdpconnect = sha1($_POST['mdpconnect ']);
+     $mdpconnect = sha1($_POST['mdpconnect']);
      if(!empty($pseudoconnect AND !empty($mdpconnect)))
      {
         $requser = $bdd->prepare("SELECT * FROM membre WHERE pseudo = ? AND mdp = ?");
@@ -21,7 +21,7 @@ if(isset($_POST['formconnect']))
             $_SESSION['id'] = $userinfo['id'];
             $_SESSION['mail'] = $userinfo['mail'];
             $_SESSION['pseudo'] = $userinfo['pseudo'];
-            header("Location = profil.php?id=".$_SESSION['id']);
+            header("Location: profil.php?id=".$_SESSION['id']);
         }
         else
         {
@@ -47,7 +47,7 @@ if(isset($_POST['formconnect']))
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inscription - LBE</title>
+    <title>Connexion - LBE</title>
 
     <link rel="stylesheet" href="style/css/style.css">
 </head>

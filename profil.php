@@ -7,9 +7,12 @@ session_start();
 
 $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 
-if(isset($_GET['id']) AND $_GET(['id'] > 0))
+if(isset($_GET['id']) AND $_GET['id'] > 0)
 {
-
+    $getid = intval($_GET['id']);
+    $requser = $bdd->prepare("SELECT * FROM membre WHERE id = ?");
+    $requser->execute(array($getid));
+    $userinfo = $requser->fetch();
 
 ?>
 
@@ -24,21 +27,25 @@ if(isset($_GET['id']) AND $_GET(['id'] > 0))
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inscription - LBE</title>
+    <title>Profil de <?php echo $userinfo['pseudo'];?></title>
 
     <link rel="stylesheet" href="style/css/style.css">
 </head>
 
 <body>
     <div align="center">
-        <h2>Profil de</h2>
+        <h2>Profil de <?php echo $userinfo['pseudo']; ?></h2>
         <br><br><br>
-        
+        Mail = <?php echo $userinfo['mail']; ?>
         <br><br><br>
         <?php
-        if(isset($erreur))
+        if(isset($_SESSION['id']) AND $userinfo['id'] == $_SESSION['id'])
         {
-            echo '<font color = "red">'.$erreur."</font>";
+        ?>
+            <a href="#">Editer mon profil</a>
+            <br><br>
+            <a href="deconnexion.php">Se déconnecter</a>
+        <?php
         }
         ?>
 
