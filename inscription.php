@@ -3,8 +3,10 @@
 
 <?php
 
+//initialisation de la base de données
 $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 
+//récupération des données du formulaire pour les transférer sur la base de données
 if(isset($_POST['forminscription']))
 {
     $pseudo = htmlspecialchars($_POST['pseudo']);
@@ -74,13 +76,12 @@ if(isset($_POST['forminscription']))
 
 ?>
 
+<!-- génération du head-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
     <!--Let browser know website is optimized for mobile-->
@@ -91,13 +92,13 @@ if(isset($_POST['forminscription']))
 </head>
 
 <body>
-    <div align="center">
-        <h2>Inscription</h2>
+    <div align="center">    <!-- le align permet de mettre tout au milieu sans css mais ducoup on le retirera -->
+        <h2>Inscription</h2>    <!-- titre modifiable, juste pour dire que c'est la page d'inscription -->
         <br><br><br>
-        <form method="POST" action="">
+        <form method="POST" action="">  <!-- formulaire, on peut le refaire tant que les input ont les attributs qui sont en dessous -->
             <table>
                 <tr>
-                    <td align="right">
+                    <td align="right">  <!-- label retirable ou modifiable -->
                         <label for="pseudo">Pseudo:</label>
                     </td>
                     <td align="right">
@@ -142,10 +143,11 @@ if(isset($_POST['forminscription']))
                 </tr>
             </table>
             <br />
-            <input type="submit" name="forminscription" value="S'inscrire">
+            <input type="submit" name="forminscription" value="S'inscrire"> <!-- le bouton est modifiable et tout, faut juste que ce soit avec les memes attributs et que ce soit un input et non un button -->
         </form>
         <br><br><br>
         <?php
+        //le $erreur renvoie un message selon l'erreur, on le print en echo mais on peut le styliser et tout
         if(isset($erreur))
         {
             echo '<font color = "red">'.$erreur."</font>";
