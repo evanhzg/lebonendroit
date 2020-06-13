@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <?php
 
 session_start();
@@ -44,69 +41,6 @@ if(isset($_SESSION['id']))
 
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
-
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profil de <?php echo $_SESSION['pseudo'];?></title>
-
-    <link rel="stylesheet" href="style/css/style.css">
-</head>
-
-<body>
-    <div align="center">
-        <h2>Modifier le profil de <?php echo $_SESSION['pseudo']; ?>:</h2>
-        <br><br><br>
-         
-        <form action="POST">
-        <table>
-                <tr>
-                    <td align="right">
-                        <label for="newpseudo">Nouveau pseudo? </label>
-                    </td>
-                    <td align="right">
-                        <input type="text" placeholder="Nouveau pseudo" id="newpseudo" name="newpseudo" value="<?php echo $user['pseudo']; ?>">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        <label for="newmail">Nouveau mail? </label>
-                    </td>
-                    <td align="right">
-                        <input type="email" placeholder="Nouveau mail" id="newmail" name="newmail" value="<?php echo $user['mail'];?>">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td align="right">
-                        <label for="newmdp">Nouveau mot de passe?</label>
-                    </td>
-                    <td align="right">
-                        <input type="password" placeholder="Nouveau mot de passe" id="newmdp" name="newmdp">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        <label for="newmdp2">Confirmer Mot de passe:</label>
-                    </td>
-                    <td align="right">
-                        <input type="password" placeholder="Confirmer mot de passe" id="newmdp2" name="newmdp2">
-                    </td>
-                </tr>
-            </table>
-            <br />
-            <input type="submit" value="Modifier le profil">
-        </form>
-    </div>
 <?php
 }
 else
@@ -114,6 +48,117 @@ else
     header("Location: connexion.php");
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link href="css/inscription.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    
+    <title>Modifier mon profil</title>
+</head>
+
+<body id="home" class="scrollspy">
+
+    <!-- Navbar -->
+
+    <div class="navbar-fixed">
+        <nav class="green">
+            <div class="container">
+                <div class="nav-wrapper"></div>
+                    <a href="index.php" class="brand-logo">Le Bon Endroit</a>
+
+                    <a href="#" data-target="mobile-nav" class="sidenav-trigger">
+                        <i class="material-icons">menu</i>
+                    </a>
+
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                            <a href="profil.php?">Retour au profil</a>
+                        </li>
+
+                        <li>
+                            <a href="deconnexion.php">Se deconnecter</a>
+                        </li>
+                    </ul>
+            </div>
+        </nav>
+    </div>
+    <ul class="sidenav" id="mobile-nav">
+        <li>
+            <a href="profil.php">Retour au profil</a>
+        </li>
+
+        <li>
+            <a href="deconnexion.php">Se deconnecter</a>
+        </li>
+
+    </ul>
+
+    <!-- Section : erreur inscription -->
+
+    <section>
+        <h5 class="red-text center-align">
+        <?php
+            if(isset($erreur)){
+                echo $erreur;
+            }
+        ?>
+        </h5>
+    </section>
+
+    <!-- Inscription -->
+
+    <div class="row">
+        <form method="POST" action="" class="col s12 m4 offset-m4">
+            <div class="card">
+                <div class="card-action green white-text">
+                    <h4 class="center-align">Modifier mon profil</h4>
+                </div>
+
+                <div class="div card-content">
+                    <div class="form-field">
+                        <label for="pseudo">Nouveau pseudo : *</label>
+                        <input type="text" id="newpseudo" name="newpseudo" class="validate" value="<?php echo $user['pseudo']; ?>" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="email">Mail : *</label>
+                        <input type="email" id="newmail" name="newmail" class="validate" value="<?php echo $user['mail']; ?>" required>
+                    </div>
+
+
+                    <div class="form-field">
+                        <label for="mdp">Mot de passe : *</label>
+                        <input type="password" id="newmdp"name="newmdp"  class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="mdp2">Confirmer mot de passe : *</label>
+                        <input type="password" id="newmdp2" name="newmdp2" class="validate" required>
+                    </div>
+
+                    <button class="btn waves-effect green" type="submit" name="forminscription">Modifier le profil
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+    // Sidenav
+        const sideNav = document.querySelector('.sidenav');
+        M.Sidenav.init(sideNav, {}); 
+    </script>
+
 </body>
 
 </html>
