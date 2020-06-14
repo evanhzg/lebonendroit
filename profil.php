@@ -7,9 +7,9 @@ $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 if(isset($_GET['id']) AND $_GET['id'] > 0)
 {
     $getid = intval($_GET['id']);
-    $requser = $bdd->prepare("SELECT * FROM membre WHERE id = ?");
-    $requser->execute(array($getid));
-    $userinfo = $requser->fetch();
+    $reqart = $bdd->prepare("SELECT * FROM annonce WHERE id = ?");
+    $reqart->execute(array($getid));
+    $article = $reqart->fetch();
 
 ?>
 
@@ -24,7 +24,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <link href="css/inscription.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     
-    <title>Profil de <?php echo $userinfo['pseudo'];?></title>
+    <title><?php echo $article['title'];?></title>
 </head>
 
 <body id="home" class="scrollspy">
@@ -67,7 +67,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
         <div class="container">
             <div class="row">
                 <h4 class="center">
-                    <span class="black-text">Profil de <?php echo $userinfo['pseudo']; ?><span>
+                    <span class="black-text"><?php echo $article['title']; ?><span>
                 </h4>
                 <div class="row">
                     <div class="col s12 m5">

@@ -67,7 +67,7 @@ if(isset($_POST['formconnect']))
                             <a href="inscription.php" class="white-text">S'inscrire</a>
                         </li>
                         <li>
-                            <a href="connection.php" class="white-text">Se connecter</a>
+                            <a href="connexion.php" class="white-text">Se connecter</a>
                         </li>
                     </ul>
             </div>
@@ -81,7 +81,7 @@ if(isset($_POST['formconnect']))
             <a href="inscription.php">S'inscrire</a>
         </li>
         <li>
-            <a href="connection.php">Se connecter</a>
+            <a href="connexion.php">Se connecter</a>
         </li>
     </ul>
 

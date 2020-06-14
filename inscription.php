@@ -25,7 +25,7 @@ if(isset($_POST['forminscription']))
     $mdp = sha1($_POST['mdp']);
     $mdp2 = sha1($_POST['mdp2']);
 
-    if(!empty($_POST['pseudo']) AND ($_POST['mail']) AND ($_POST['mail2']) AND ($_POST['mdp']) AND ($_POST['mdp2']))
+    if(!empty($_POST['pseudo']) AND !empty($_POST['mail']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2']))
     {
         $pseudolength = strlen($pseudo);
         if($pseudolength <= 20)
@@ -111,7 +111,7 @@ if(isset($_POST['forminscription']))
                         </li>
 
                         <li>
-                            <a href="connection.php">Se connecter</a>
+                            <a href="connexion.php">Se connecter</a>
                         </li>
                     </ul>
             </div>
@@ -127,7 +127,7 @@ if(isset($_POST['forminscription']))
         </li>
 
         <li>
-            <a href="connection.php">Se connecter</a>
+            <a href="connexion.php">Se connecter</a>
         </li>
     </ul>
 
