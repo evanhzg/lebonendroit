@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-    
 <?php
 
 session_start();
 $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
+$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 if(isset($_POST['formannonce']))
 {
@@ -12,14 +10,13 @@ if(isset($_POST['formannonce']))
     $title = htmlspecialchars($_POST['title']);
     $price = htmlspecialchars($_POST['price']);
     $descr = htmlspecialchars($_POST['description']);
-    $dates = date("d/m/Y");
+    $dates = date("Y-m-d");
     $status = $_POST['status'];
 
     if(!empty($_POST['title']) AND !empty($_POST['price']) AND !empty($_POST['description']))
     {
-        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $insertmbr = $bdd->prepare("INSERT INTO annonce ('owner_id', 'title', 'price', 'description', 'status', 'dates'=null, 'category_id'=null, 'photos'=null) VALUES (?, ?, ?, ?, ?)");
-        $insertmbr->execute(array($creator, $title, $price, $descr, $status));
+        $insertmbr = $bdd->prepare("INSERT INTO annonce (owner_id, title, price, description, status, dates, category_id, photos) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $insertmbr->execute(array($creator, $title, $price, $descr, $status, $dates, 1, 1));
         $erreur = "Annonce créée avec succès!";
         $latest_id = $bdd->lastInsertId();
         //header('Location: annonce.php?id='.$latest_id);
@@ -31,7 +28,9 @@ if(isset($_POST['formannonce']))
     }
 }
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

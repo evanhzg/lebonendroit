@@ -14,7 +14,6 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
     $reqannonce = $bdd->prepare("SELECT * FROM annonce WHERE owner_id = ?");
     $reqannonce->execute(array($getid)); //donne 18 entrées pour seulement 2 annonces donc chelou chelou quand meme (fait pareil pour nimporte quel nbr d'annonces)
     $annonce = $reqannonce->fetch();
-    var_dump($annonce);
     
 ?>
 
@@ -127,11 +126,11 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
     <!-- affichage des articles de l'utilisateur -->
     <section id="popular" class="section section-popular scrollspy">
     <?php
-    foreach ($annonce as $test)
+    for ($i = 0; $i < count($annonce); $i++)
     {
     ?>
         <div class="container">            
-            <span class="black-text"><?php echo $annonce['title']; ?></span>
+            <span class="black-text"><?php echo $annonce['$i']['title']; ?></span>
             <br>
             <span class="black-text"><?php echo $annonce['price']; ?></span>
             <br>
