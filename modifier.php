@@ -13,30 +13,85 @@ if(isset($_SESSION['id']))
     if(isset($_POST['newpseudo']) AND !empty($_POST['newpseudo']) AND $_POST['newpseudo'] != $user['pseudo'])
     {
         $newpseudo = htmlspecialchars($_POST['newpseudo']); 
-        $insertpseudo = $bdd->repare("UPDATE membre SET pseudo = ? WHERE id = ?");
+        $insertpseudo = $bdd->prepare("UPDATE membre SET pseudo = ? WHERE id = ?");
         $insertpseudo->execute(array($newpseudo, $_SESSION['id']));
+        header("Location: profil.php?id=".$_SESSION['id']);
+    }
+
+    if(isset($_POST['newnom']) AND !empty($_POST['newnom']) AND $_POST['newnom'] != $user['nom'])
+    {
+        $newnom = htmlspecialchars($_POST['newnom']); 
+        $insertnom = $bdd->prepare("UPDATE membre SET nom = ? WHERE id = ?");
+        $insertnom->execute(array($newnom, $_SESSION['id']));
+        header("Location: profil.php?id=".$_SESSION['id']);
+    }
+
+    if(isset($_POST['newprenom']) AND !empty($_POST['newprenom']) AND $_POST['newprenom'] != $user['prenom'])
+    {
+        $newprenom = htmlspecialchars($_POST['newprenom']); 
+        $insertprenom = $bdd->prepare("UPDATE membre SET prenom = ? WHERE id = ?");
+        $insertprenom->execute(array($newprenom, $_SESSION['id']));
         header("Location: profil.php?id=".$_SESSION['id']);
     }
     
     if(isset($_POST['newmail']) AND !empty($_POST['newmail']) AND $_POST['newmail'] != $user['mail'])
     {
         $newmail = htmlspecialchars($_POST['newmail']); 
-        $insertmail = $bdd->repare("UPDATE membre SET mail = ? WHERE id = ?");
+        $insertmail = $bdd->prepare("UPDATE membre SET mail = ? WHERE id = ?");
         $insertmail->execute(array($newmail, $_SESSION['id']));
         header("Location: profil.php?id=".$_SESSION['id']);
     }
 
-    if(isset($_POST['newmdp']) AND !empty($_POST['newmdp']) AND $_POST['newmdp'] != $user['mdp'] AND $_POST['newmdp'] == $_POST['newmdp2'])
+    if(isset($_POST['newmdp']) AND !empty($_POST['newmdp']) AND $_POST['newmdp'] != $user['mdp'])
     {
-        $newmdp = htmlspecialchars($_POST['newmdp']); 
-        $insertmdp = $bdd->repare("UPDATE membre SET mdp = ? WHERE id = ?");
-        $insertmdp->execute(array($newmdp, $_SESSION['id']));
-        header("Location: profil.php?id=".$_SESSION['id']);
+        if($_POST['newmdp'] == $_POST['newmdp2'])
+        {
+            $newmdp = sha1($_POST['newmdp']);
+            $insertmdp = $bdd->prepare("UPDATE membre SET mdp = ? WHERE id = ?");
+            $insertmdp->execute(array($newmdp, $_SESSION['id']));
+            header("Location: profil.php?id=".$_SESSION['id']);
+        }
+        else
+        {
+            $erreur = "Les mots de passe de correspondent pas!";
+        }
     }
 
-    if(isset($_POST['newpseudo']) AND $_POST['newpseudo'] == $user['pseudo'])
+    if(isset($_FILES['avatar']) AND !empty($_FILES['avatar']['name']))
     {
-        header("Location: profil.php?id=".$_SESSION['id']);
+        $tailleMax = 2097152;
+        $extensions = array('jpg', 'jpeg', 'png', 'gif');
+        if ($_FILES['avatar']['size'] <= $tailleMax)
+        {
+            $extensionUpld = strtolower(substr(strrchr($_FILES['avatar']['name'], '.'), 1));
+            if(in_array($extensionUpld, $extensions))
+            {
+                $chemin = "membres/avatars/".$_SESSION['id'].".".$extensionUpld;
+                $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
+
+                if($resultat)
+                {
+                    $updateAvatar = $bdd->prepare("UPDATE membre SET avatar = :avatar WHERE id = :id");
+                    $updateAvatar->execute(array(
+                        'avatar' => $_SESSION['id'].".".$extensionUpld,
+                        'id' => $_SESSION['id']
+                    ));
+                    header("Location: profil.php?id=".$_SESSION['id']); 
+                }
+                else
+                {
+                    $erreur = "erreur d'importation. réessayer.";
+                }
+            }
+            else
+            {
+                $erreur = "Cette extension de fichier n'est pas reconnue. jpg, jpeg, png et gif uniquement.";
+            }
+        }
+        else
+        {
+            $erreur = "Votre photo de profil ne peut pas dépasser 2Mo.";
+        }
     }
 
 ?>
@@ -114,7 +169,7 @@ else
     <!-- Inscription -->
 
     <div class="row">
-        <form method="POST" action="" class="col s12 m4 offset-m4">
+        <form method="POST" action="" enctype="multipart/form-data" class="col s12 m4 offset-m4">
             <div class="card">
                 <div class="card-action green white-text">
                     <h4 class="center-align">Modifier mon profil</h4>
@@ -122,24 +177,39 @@ else
 
                 <div class="div card-content">
                     <div class="form-field">
-                        <label for="pseudo">Nouveau pseudo : *</label>
-                        <input type="text" id="newpseudo" name="newpseudo" class="validate" value="<?php echo $user['pseudo']; ?>" required>
+                        <label for="pseudo">Nouveau pseudo : </label>
+                        <input type="text" id="newpseudo" name="newpseudo" class="validate" value="<?php echo $user['pseudo']; ?>">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="nom">Nouveau nom : </label>
+                        <input type="text" id="newnom" name="newnom" class="validate" value="<?php echo $user['nom']; ?>">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="prenom">Nouveau prénom : </label>
+                        <input type="text" id="newprenom" name="newprenom" class="validate" value="<?php echo $user['prenom']; ?>">
                     </div>
 
                     <div class="form-field">
-                        <label for="email">Mail : *</label>
-                        <input type="email" id="newmail" name="newmail" class="validate" value="<?php echo $user['mail']; ?>" required>
+                        <label for="email">Mail : </label>
+                        <input type="email" id="newmail" name="newmail" class="validate" value="<?php echo $user['mail']; ?>">
                     </div>
 
 
                     <div class="form-field">
-                        <label for="mdp">Mot de passe : *</label>
-                        <input type="password" id="newmdp"name="newmdp"  class="validate" required>
+                        <label for="mdp">Mot de passe : </label>
+                        <input type="password" id="newmdp"name="newmdp"  class="validate">
                     </div>
 
                     <div class="form-field">
-                        <label for="mdp2">Confirmer mot de passe : *</label>
-                        <input type="password" id="newmdp2" name="newmdp2" class="validate" required>
+                        <label for="mdp2">Confirmer mot de passe : </label>
+                        <input type="password" id="newmdp2" name="newmdp2" class="validate">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="avatar">Photo de profil : </label>
+                        <input type="file" id="avatar" name="avatar" class="validate">
                     </div>
 
                     <button class="btn waves-effect green" type="submit" name="forminscription">Modifier le profil

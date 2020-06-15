@@ -22,10 +22,12 @@ if(isset($_POST['forminscription']))
     $pseudo = htmlspecialchars($_POST['pseudo']);
     $mail = htmlspecialchars($_POST['mail']);
     $mail2 = htmlspecialchars($_POST['mail2']);
+    $nom = htmlspecialchars($_POST['nom']);
+    $prenom = htmlspecialchars($_POST['prenom']);
     $mdp = sha1($_POST['mdp']);
     $mdp2 = sha1($_POST['mdp2']);
 
-    if(!empty($_POST['pseudo']) AND !empty($_POST['mail']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2']))
+    if(!empty($_POST['pseudo']) AND !empty($_POST['mail']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2']) AND !empty($_POST['nom']) AND !empty($_POST['prenom']))
     {
         $pseudolength = strlen($pseudo);
         if($pseudolength <= 20)
@@ -45,8 +47,8 @@ if(isset($_POST['forminscription']))
                     {
                         if($mdp == $mdp2)
                         {
-                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, mail, mdp) VALUES (?, ?, ?)");
-                            $insertmbr->execute(array($pseudo, $mail, $mdp));
+                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, mail, mdp, nom, prenom) VALUES (?, ?, ?, ?, ?)");
+                            $insertmbr->execute(array($pseudo, $mail, $mdp, $nom, $prenom));
                             $erreur = "Compte créé avec succès!";
                             header('Location: index.php');
                         }
@@ -156,6 +158,16 @@ if(isset($_POST['forminscription']))
                     <div class="form-field">
                         <label for="pseudo">Pseudo : *</label>
                         <input type="text" id="pseudo" name="pseudo" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="nom">Nom : *</label>
+                        <input type="text" id="nom" name="nom" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="prenom">Prénom : *</label>
+                        <input type="text" id="prenom" name="prenom" class="validate" required>
                     </div>
 
                     <div class="form-field">
