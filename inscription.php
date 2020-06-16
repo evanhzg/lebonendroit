@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link href="css/inscription.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    
+    <title>LBE - Inscription</title>
+</head>
+
 
 <?php
 
@@ -10,13 +22,15 @@ if(isset($_POST['forminscription']))
     $pseudo = htmlspecialchars($_POST['pseudo']);
     $mail = htmlspecialchars($_POST['mail']);
     $mail2 = htmlspecialchars($_POST['mail2']);
+    $nom = htmlspecialchars($_POST['nom']);
+    $prenom = htmlspecialchars($_POST['prenom']);
     $mdp = sha1($_POST['mdp']);
     $mdp2 = sha1($_POST['mdp2']);
 
-    if(!empty($_POST['pseudo']) AND ($_POST['mail']) AND ($_POST['mail2']) AND ($_POST['mdp']) AND ($_POST['mdp2']))
+    if(!empty($_POST['pseudo']) AND !empty($_POST['mail']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2']) AND !empty($_POST['nom']) AND !empty($_POST['prenom']))
     {
         $pseudolength = strlen($pseudo);
-        if($pseudolength <= 255)
+        if($pseudolength <= 20)
         {
             if($mail == $mail2)
             {
@@ -29,18 +43,19 @@ if(isset($_POST['forminscription']))
                     $reqpseudo = $bdd->prepare("SELECT * FROM membre WHERE pseudo = ?");
                     $reqpseudo->execute(array($pseudo));
                     $pseudoexist = $reqpseudo->rowCount();
+                    $avatar = "membres/avatars/default.png";
+
                     if($mailexist == 0 && $pseudoexist == 0)
                     {
                         if($mdp == $mdp2)
                         {
-                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, mail, mdp) VALUES (?, ?, ?)");
-                            $insertmbr->execute(array($pseudo, $mail, $mdp));
+                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, nom, prenom, mail, mdp) VALUES (?, ?, ?, ?, ?)");
+                            $insertmbr->execute(array($pseudo, $nom, $prenom, $mail, $mdp));
                             $erreur = "Compte créé avec succès!";
-                            header('Location: index.php');
                         }
                         else
                         {
-                            $erreur = "Vos mots de passe diffèrent!";
+                            $erreur = "Vos mots de passe diffèrent !";
                         }
                     }
                     elseif($mailexist != 0)
@@ -54,17 +69,17 @@ if(isset($_POST['forminscription']))
                 }
                 else
                 {
-                    $erreur = "Votre mail n'est pas valide!";
+                    $erreur = "Votre mail n'est pas valide !";
                 }
             }
             else
             {
-                $erreur = "Les deux champs 'mail' doivent correspondre!";
+                $erreur = "Les deux champs 'mail' doivent correspondre !";
             }
         }
         else
         {
-            $erreur = "Votre pesudo ne doit pas dépasser 255 caracteres!";
+            $erreur = "Votre pesudo ne doit pas dépasser 20 caracteres !";
         }
     }
     else
@@ -75,84 +90,121 @@ if(isset($_POST['forminscription']))
 
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+<body id="home" class="scrollspy">
 
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Inscription - LBE</title>
+    <!-- Navbar -->
 
-    <link rel="stylesheet" href="style/css/style.css">
-</head>
+    <div class="navbar-fixed">
+        <nav class="green">
+            <div class="container">
+                <div class="nav-wrapper"></div>
+                    <a href="index.php" class="brand-logo">Le Bon Endroit</a>
 
-<body>
-    <div align="center">
-        <h2>Inscription</h2>
-        <br><br><br>
-        <form method="POST" action="">
-            <table>
-                <tr>
-                    <td align="right">
-                        <label for="pseudo">Pseudo:</label>
-                    </td>
-                    <td align="right">
-                        <input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" value="<?php if(isset($pseudo)) {echo $pseudo;} ?>">
-                    </td>
-                </tr>
+                    <a href="#" data-target="mobile-nav" class="sidenav-trigger">
+                        <i class="material-icons">menu</i>
+                    </a>
 
-                <tr>
-                    <td align="right">
-                        <label for="mail">Mail:</label>
-                    </td>
-                    <td align="right">
-                        <input type="email" placeholder="Mail" id="mail" name="mail">
-                    </td>
-                </tr>
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                            <a href="#deposer">Déposer une annonce</a>
+                        </li>
 
-                <tr>
-                    <td align="right">
-                        <label for="mail2">Confirmer Mail:</label>
-                    </td>
-                    <td align="right">
-                        <input type="email" placeholder="Confirmation Mail" id="mail2" name="mail2">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td align="right">
-                        <label for="mdp">Mot de passe:</label>
-                    </td>
-                    <td align="right">
-                        <input type="password" placeholder="Mot de passe" id="mdp" name="mdp">
-                    </td>
-                </tr>
+                        <li>
+                            <a href="inscription.php">S'inscrire</a>
+                        </li>
 
-                <tr>
-                    <td align="right">
-                        <label for="mdp2">Confirmer Mot de passe:</label>
-                    </td>
-                    <td align="right">
-                        <input type="password" placeholder="Confirmer Mot de passe" id="mdp2" name="mdp2">
-                    </td>
-                </tr>
-            </table>
-            <br />
-            <input type="submit" name="forminscription" value="S'inscrire">
-        </form>
-        <?php
-        if(isset($erreur))
-        {
-            echo '<font color = "red">'.$erreur."</font>";
-        }
-        ?>
-
+                        <li>
+                            <a href="connexion.php">Se connecter</a>
+                        </li>
+                    </ul>
+            </div>
+        </nav>
     </div>
-</body>
+    <ul class="sidenav" id="mobile-nav">
+        <li>
+            <a href="#deposer">Déposer une annonce</a>
+        </li>
 
-</html>
+        <li>
+            <a href="inscription.php">S'inscrire</a>
+        </li>
+
+        <li>
+            <a href="connexion.php">Se connecter</a>
+        </li>
+    </ul>
+
+    <!-- Section : erreur inscription -->
+
+    <section>
+        <h5 class="red-text center-align">
+        <?php
+            if(isset($erreur)){
+                echo $erreur;
+            }
+        ?>
+        </h5>
+    </section>
+
+    <!-- Inscription -->
+
+    <div class="row">
+        <form method="POST" action="" class="col s10 m4 offset-m4">
+            <div class="card">
+                <div class="card-action green white-text">
+                    <h4 class="center-align">Inscription</h4>
+                </div>
+
+                <div class="div card-content">
+                    <div class="form-field">
+                        <label for="pseudo">Pseudo : *</label>
+                        <input type="text" id="pseudo" name="pseudo" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="nom">Nom : *</label>
+                        <input type="text" id="nom" name="nom" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="prenom">Prénom : *</label>
+                        <input type="text" id="prenom" name="prenom" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="email">Mail : *</label>
+                        <input type="email" id="mail" name="mail" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="confirm-mail">Confirmer Mail : *</label>
+                        <input type="email" id="mail2" name="mail2" class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="mdp">Mot de passe : *</label>
+                        <input type="password" id="mdp"name="mdp"  class="validate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="mdp2">Confirmer mot de passe : *</label>
+                        <input type="password" id="mdp2" name="mdp2" class="validate" required>
+                    </div>
+
+                    <button class="btn waves-effect green" type="submit" name="forminscription">S'inscrire
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+    // Sidenav
+        const sideNav = document.querySelector('.sidenav');
+        M.Sidenav.init(sideNav, {}); 
+    </script>
+
+</body>
