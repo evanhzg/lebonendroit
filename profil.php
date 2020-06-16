@@ -13,7 +13,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
 
     $reqannonce = $bdd->prepare("SELECT * FROM annonce WHERE owner_id = ?");
     $reqannonce->execute(array($getid)); //donne 18 entrées pour seulement 2 annonces donc chelou chelou quand meme (fait pareil pour nimporte quel nbr d'annonces)
-    $annonce = $reqannonce->fetch();
+    $annonce = $reqannonce->fetchAll();
     
 ?>
 
@@ -71,7 +71,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
         <div class="container">
             <div class="row">
                 <h4 class="center">
-                    <span class="black-text"><?php echo $userinfo['prenom']; echo " "; echo $userinfo['nom'] ?><span>
+                    <span class="black-text"><?php echo $userinfo['prenom']." ".$userinfo['nom'] ?><span>
                     <br>
                     <?php
                     if(isset($_SESSION['id']) AND $userinfo['id'] == $_SESSION['id'])
@@ -130,11 +130,12 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
     {
     ?>
         <div class="container">            
-            <span class="black-text"><?php echo $annonce['$i']['title']; ?></span>
+            <span class="black-text"><?php echo $annonce[$i]['title']; ?></span>
             <br>
-            <span class="black-text"><?php echo $annonce['price']; ?></span>
+            <span class="black-text"><?php echo $annonce[$i]['price']; ?></span>
             <br>
-            <a href="annonce.php?id=<?php echo $annonce['id']; ?>">Voir l'annonce</a>
+            <a href="annonce.php?id=<?php echo $annonce[$i]['id']; ?>">Voir l'annonce</a>
+            <br><br>
         </div>
     <?php
     }

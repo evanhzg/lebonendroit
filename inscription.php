@@ -43,14 +43,15 @@ if(isset($_POST['forminscription']))
                     $reqpseudo = $bdd->prepare("SELECT * FROM membre WHERE pseudo = ?");
                     $reqpseudo->execute(array($pseudo));
                     $pseudoexist = $reqpseudo->rowCount();
+                    $avatar = "membres/avatars/default.png";
+
                     if($mailexist == 0 && $pseudoexist == 0)
                     {
                         if($mdp == $mdp2)
                         {
-                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, mail, mdp, nom, prenom) VALUES (?, ?, ?, ?, ?)");
-                            $insertmbr->execute(array($pseudo, $mail, $mdp, $nom, $prenom));
+                            $insertmbr = $bdd->prepare("INSERT INTO membre (pseudo, nom, prenom, mail, mdp) VALUES (?, ?, ?, ?, ?)");
+                            $insertmbr->execute(array($pseudo, $nom, $prenom, $mail, $mdp));
                             $erreur = "Compte créé avec succès!";
-                            header('Location: index.php');
                         }
                         else
                         {

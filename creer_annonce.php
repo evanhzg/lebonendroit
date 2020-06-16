@@ -3,6 +3,10 @@
 session_start();
 $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if(empty($_SESSION))
+{
+    header("Location : index.php");
+}
 
 if(isset($_POST['formannonce']))
 {
@@ -25,6 +29,43 @@ if(isset($_POST['formannonce']))
     else
     {
         $erreur = "Tous les champs contenant une * doivent être remplis!";
+    }
+
+    if(isset($_FILES['photos']) AND !empty($_FILES['photos']['name']))
+    {
+        $tailleMax = 2097152;
+        $extensions = array('jpg', 'jpeg', 'png', 'gif');
+        if ($_FILES['avatar']['size'] <= $tailleMax)
+        {
+            $extensionUpld = strtolower(substr(strrchr($_FILES['photos']['name'], '.'), 1));
+            if(in_array($extensionUpld, $extensions))
+            {
+                $chemin = "annonces/photos/".$_GET['id'].".".$extensionUpld;
+                $resultat = move_uploaded_file($_FILES['photo']['tmp_name'], $chemin);
+
+                if($resultat)
+                {
+                    $updatePhotos = $bdd->prepare("UPDATE annonce SET photo = :photo WHERE id = :id");
+                    $updatePhotos->execute(array(
+                        'photo' => $_GET['id'].".".$extensionUpld,
+                        'id' => $_GET['id']
+                    ));
+                    header("Location: profil.php?id=".$_SESSION['id']);
+                }
+                else
+                {
+                    $erreur = "erreur d'importation. réessayer.";
+                }
+            }
+            else
+            {
+                $erreur = "Cette extension de fichier n'est pas reconnue. jpg, jpeg, png et gif uniquement.";
+            }
+        }
+        else
+        {
+            $erreur = "Vots photos ne peuvent pas dépasser 2Mo.";
+        }
     }
 }
 ?>
@@ -80,6 +121,16 @@ if(isset($_POST['formannonce']))
             <option value="1">Actif</option>
             <option value="2">Inactif</option>
         </select>
+    </div>
+
+    <div>
+    <br><br>
+        <label for="photo1">Photo 1</label>
+        <input type="file" id="photo" name="photo" multiple="multiple" class="validate">
+        <label for="photo2">Photo 2</label>
+        <input type="file" id="photo" name="photo" multiple="multiple" class="validate">
+        <label for="photo3">Photo 3</label>
+        <input type="file" id="photo" name="photo" multiple="multiple" class="validate">
     </div>
     <br>
     <button type="submit" name="formannonce">Publier l'annonce</button>
