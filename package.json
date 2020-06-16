@@ -1,0 +1,19 @@
+{
+  "name": "lebonendroit",
+  "version": "1.0.0",
+  "description": "projet Web Dev",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Precious Soriano",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^4.14.1"
+  },
+  "dependencies": {
+    "del": "^5.1.0"
+  }
+}
