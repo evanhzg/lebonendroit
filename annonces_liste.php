@@ -7,10 +7,15 @@ $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
 $reqannonce = $bdd->query("SELECT * FROM annonce");
 $annonce = $reqannonce->fetchAll();
 
-// $ownerId = $annonce['owner_id'];
-// $reqowner = $bdd->prepare("SELECT * FROM membre WHERE id = ?");
-// $reqowner->execute(array($ownerId));
-// $owner = $reqowner->fetch();
+$articles = $bdd->query('SELECT title FROM annonce ORDER BY id DESC');
+if(isset($_GET['query']) AND !empty($_GET['query'])) {
+   $query = htmlspecialchars($_GET['query']);
+   $articles = $bdd->query('SELECT title FROM annonce WHERE title
+ LIKE "%'.$query.'%" ORDER BY id DESC');
+   if($articles->rowCount() == 0) {
+      $articles = $bdd->query('SELECT title FROM annonce WHERE CONCAT(title, description) LIKE "%'.$query.'%" ORDER BY id DESC');
+   }
+}
 ?>
 
 <!DOCTYPE html>
@@ -76,25 +81,43 @@ $annonce = $reqannonce->fetchAll();
     </ul>
 
 <section id="popular" class="section section-popular scrollspy">
+    <form method="GET">
+        <input type="search" name="query" placeholder="Mot-clé, titre...">
+        <input type="submit" value="Valider">
+        <br><br><br>
+    </form>
+
     <?php
-    for ($i = 0; $i < count($annonce); $i++)
+    if($articles->rowCount() > 0)
+    { ?>
+    <ul>
+    <?php
+    while ($a = $articles->fetch())
     {
     ?>
         <div class="container">
-            <div class="card-panel white center-align">           
-                <span class="black-text"><?php echo $annonce[$i]['title']; ?></span>
+            <div class="card-panel white center-align">
+                <span class="black-text"><?php echo $a['title']; ?></span>
                 <br>
-                <span class="black-text"><?php echo $annonce[$i]['price']; ?></span>
-                <br>
-                <!-- <span class="black-text"><?php echo $owner[$i]['pseudo']; ?></span>
-                <br> -->
-                <a href="annonce.php?id=<?php echo $annonce[$i]['id']; ?>">Voir l'annonce</a>
+                <a href="annonce.php?id=<?php echo $a['id']; ?>">Voir l'annonce</a>
                 <br><br>
             </div>
         </div>
     <?php
     }
     ?>
+    </ul>
+
+    <?php
+    }
+    else
+    {
+    ?>
+    Aucun résultat pour: <?= $query ?>...
+    <?php
+    }
+    ?>
+    
 </section>
 
 </div>

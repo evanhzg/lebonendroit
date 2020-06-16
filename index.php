@@ -1,3 +1,13 @@
+<?php
+session_start();
+$bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
+
+if(isset($_POST['query']) AND !empty($_POST['query'])) {
+    $query = htmlspecialchars($_POST['query']);
+    header ("Location : annonces_liste.php?query=".$query);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,10 +25,7 @@
     <title>Le Bon Endroit - Site d'annonces</title>
 </head>
 
-<?php
-session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
-?>
+
 
 <body id="home" class="scrollspy">
 
@@ -40,6 +47,9 @@ $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
                         if(isset($_SESSION['id']))
                         {
                         ?>
+                            <li>
+                                <a href="profil.php?id=<?php echo $_SESSION['id']?>">Mon Profil</a>
+                            </li>
                             <li>
                                 <a href="deconnexion.php">Se déconnecter</a>
                             </li>
@@ -101,7 +111,9 @@ $bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
                 <div class="col s12">
                     <h4>Quelle catégorie cherchez vous?</h4>
                     <div class="input-field">
-                        <input type="text" class="white grey-text autocomplete" id="autocomplete-input" placeholder="Ordinateurs, bricolage, emploi...">
+                        <form method="POST">
+                            <input type="search" name="query" class="white grey-text autocomplete" id="autocomplete-input" placeholder="Ordinateurs, bricolage, emploi...">
+                        </form>
                     </div>
                 </div>
             </div>

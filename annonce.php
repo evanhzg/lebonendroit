@@ -88,6 +88,8 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
                 <h4 class="center">
                     <span class="black-text"><?php echo $category['name']." : ".$annonce['title']; ?><span>
                 </h4>
+                <img src="img/annonces/<?php echo $annonce['id']; ?>/<?php echo $annonce['photo'] ?>" style="width:200px; height:200px; object-fit:cover; border-radius:50%;" >
+                <br><br><br>
                 <div class="row">
                     <div class="col s12 m5">
                         <div class="card-panel white center-align">

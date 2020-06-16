@@ -12,7 +12,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
     $userinfo = $requser->fetch();
 
     $reqannonce = $bdd->prepare("SELECT * FROM annonce WHERE owner_id = ?");
-    $reqannonce->execute(array($getid)); //donne 18 entrées pour seulement 2 annonces donc chelou chelou quand meme (fait pareil pour nimporte quel nbr d'annonces)
+    $reqannonce->execute(array($getid));
     $annonce = $reqannonce->fetchAll();
     
 ?>
