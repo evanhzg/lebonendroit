@@ -66,7 +66,7 @@ if(isset($_SESSION['id']))
             $extensionUpld = strtolower(substr(strrchr($_FILES['avatar']['name'], '.'), 1));
             if(in_array($extensionUpld, $extensions))
             {
-                $chemin = "membres/avatars/".$_SESSION['id'].".".$extensionUpld;
+                $chemin = "img/membres/".$_SESSION['id'].".".$extensionUpld;
                 $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
 
                 if($resultat)

@@ -89,7 +89,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
                             if(!empty($userinfo['avatar']))
                             {
                             ?>
-                                <img src="membres/avatars/<?php echo $userinfo['avatar']; ?>" style="width:200px; height:200px; object-fit:cover; border-radius:50%;" >
+                                <img src="img/membres/<?php echo $userinfo['avatar']; ?>" style="width:200px; height:200px; object-fit:cover; border-radius:50%;" >
                                 <br><br><br>
                             <?php
                             }
@@ -129,20 +129,20 @@ if(isset($_GET['id']) AND $_GET['id'] > 0)
     for ($i = 0; $i < count($annonce); $i++)
     {
     ?>
-        <div class="container">            
-            <span class="black-text"><?php echo $annonce[$i]['title']; ?></span>
-            <br>
-            <span class="black-text"><?php echo $annonce[$i]['price']; ?></span>
-            <br>
-            <a href="annonce.php?id=<?php echo $annonce[$i]['id']; ?>">Voir l'annonce</a>
-            <br><br>
+        <div class="container">
+            <div class="card-panel white center-align">           
+                <span class="black-text"><?php echo $annonce[$i]['title']; ?></span>
+                <br>
+                <span class="black-text"><?php echo $annonce[$i]['price']; ?></span>
+                <br>
+                <a href="annonce.php?id=<?php echo $annonce[$i]['id']; ?>">Voir l'annonce</a>
+                <br><br>
+            </div>
         </div>
     <?php
     }
     ?>
     </section>
-
-    </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 

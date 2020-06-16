@@ -35,12 +35,12 @@ if(isset($_POST['formannonce']))
     {
         $tailleMax = 2097152;
         $extensions = array('jpg', 'jpeg', 'png', 'gif');
-        if ($_FILES['avatar']['size'] <= $tailleMax)
+        if ($_FILES['photo']['size'] <= $tailleMax)
         {
-            $extensionUpld = strtolower(substr(strrchr($_FILES['photos']['name'], '.'), 1));
+            $extensionUpld = strtolower(substr(strrchr($_FILES['photo']['name'], '.'), 1));
             if(in_array($extensionUpld, $extensions))
             {
-                $chemin = "annonces/photos/".$_GET['id'].".".$extensionUpld;
+                $chemin = "img/annonces/".$_GET['id'].".".$extensionUpld;
                 $resultat = move_uploaded_file($_FILES['photo']['tmp_name'], $chemin);
 
                 if($resultat)
